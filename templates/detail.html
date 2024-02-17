@@ -1,0 +1,35 @@
+{% extends 'base/base.html' %}
+
+{% block title %}
+	{{ product.title }}
+{% endblock %}
+{% block content %}
+	{% include 'base/header.html' %}
+    <main>
+        <div style="display: flex; justify-content: center;">
+            <div class="item-element" >
+                <h1 style="padding-bottom: 20px">{{ product.title }}</h1>
+                {{ product.description|safe }}
+                    <ul style="padding:20px;display: flex" >
+                        {% for image in product.images.all %}
+                            <li style="padding: 30px"><img src="{{ image.image.url }}" alt="Images" style="width: 300px; height: 300px;"></li>
+                        {% endfor %}
+                    </ul>
+            <center>
+                <div style="display: flex;align-items: center;gap: 20px">
+                    <p class="price" style="font-size: 40px;color: white;background-color: red">{{ product.price }} som</p>
+                        {% if product not in favorite.items_favorites.all %}
+                            <h1>Продукт добавлен в избранный</h1>
+                            {% else %}
+                            <form method="post" action="{% url 'add_to_favorite' product.pk %}" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <button type="submit" style="background: red">Add to Favorites</button>
+                            </form>
+                        {% endif %}
+                </div>
+            </center>
+            </div>
+        </div>
+    </main>
+    {% include 'base/footer.html' %}
+{% endblock %}
